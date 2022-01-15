@@ -36,7 +36,7 @@ public class PairwiseIdentifiersTest extends BaseTest {
         //If the list is empty do nothing (successful test)
         if (lr.getItemsPerPage()>0) {
             UserResource user=(UserResource) lr.getResources().get(0);
-            assertNotNull(user.getPairwiseIdentitifers());
+            assertNotNull(user.getPairwiseIdentifiers());
 
             //Prepare the removal of the user's PPIDs
             PatchOperation operation = new PatchOperation();
@@ -50,7 +50,7 @@ public class PairwiseIdentifiersTest extends BaseTest {
 
             //Ensure they are not there anymore.
             user=response.readEntity(UserResource.class);
-            assertNull(user.getPairwiseIdentitifers());
+            assertNull(user.getPairwiseIdentifiers());
 
             //This test does not guarantee the ou=pairwiseIdentifiers sub-branch disappears... only the oxPPID LDAP attribute
         }

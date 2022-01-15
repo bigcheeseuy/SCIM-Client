@@ -16,7 +16,11 @@ import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Response;
 
+import java.util.Map;
+import java.util.Set;
+
 import static javax.ws.rs.core.Response.Status.OK;
+import static org.gluu.oxtrust.model.scim2.Constants.USER_EXT_SCHEMA_ID;
 import static org.testng.Assert.*;
 
 /**
@@ -35,7 +39,7 @@ public class SampleTest extends BaseTest {
                 umaAatClientJksPath, umaAatClientJksPassword, umaAatClientKeyId);
 
         SearchRequest sr=new SearchRequest();
-        sr.setFilter("userName eq \"admin\"");
+        sr.setFilter("userName eq \"n0v4c4n3\"");
 
         Response response = myclient.searchUsersPost(sr);
         assertEquals(response.getStatus(), OK.getStatusCode());
@@ -43,6 +47,24 @@ public class SampleTest extends BaseTest {
         UserResource u = (UserResource) response.readEntity(ListResponse.class).getResources().get(0);
         logger.debug("Hello {}!", u.getDisplayName());
 
+        Set<String> schemaNames = u.getSchemas();
+        logger.debug("Searching schemas");
+        for (String schema : schemaNames) {
+            logger.debug("Attributes: " + schema);
+        }
+
+        CustomAttributes custAttrs1 = u.getCustomAttributes(USER_EXT_SCHEMA_ID);
+        Set<String> attrNames = custAttrs1.getAttributeNames();
+        logger.debug("Searching attributes");
+        for (String name : attrNames) {
+            logger.debug("Attributes: " + name);
+        }
+
+        logger.debug("Searching attributes map");
+        Map<String, Object> map = u.getCustomAttributes();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            logger.debug(entry.getKey() + ":" + entry.getValue().toString());
+        }
     }
 
     //@Test
